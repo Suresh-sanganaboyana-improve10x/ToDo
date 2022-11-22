@@ -7,11 +7,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TaskListActivity extends AppCompatActivity {
-    public ArrayList<TaskList> taskLists;
+    public ArrayList<TaskList> taskLists = new ArrayList<>();
     public RecyclerView taskListRv;
     public TaskListAdapter taskListAdapter;
 
@@ -20,31 +26,32 @@ public class TaskListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
         getSupportActionBar().setTitle("Task List");
-        setupDataForTaskList();
         setupAddButton();
         setupRecyclerViewForTaskList();
     }
-    public void setupDataForTaskList() {
-        taskLists = new ArrayList<>();
-        TaskList one = new TaskList();
-        one.taskTxt = "Get vegetables";
-        one.description = "for 1 week";
-        taskLists.add(one);
 
-        TaskList two = new TaskList();
-        two.taskTxt = "Reading news";
-        two.description = "Explore politcs, filmy and sports";
-        taskLists.add(two);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchData();
+    }
 
-        TaskList three = new TaskList();
-        three.taskTxt = "Prepare Lunch";
-        three.description = "Biryani and Raitha. yummyyyyy";
-        taskLists.add(three);
+    public void fetchData() {
+        TodoApi todoApi = new TodoApi();
+        TodoService todoService = todoApi.createTodoService();
+        Call<List<TaskList>> call = todoService.fetchTask();
+        call.enqueue(new Callback<List<TaskList>>() {
+            @Override
+            public void onResponse(Call<List<TaskList>> call, Response<List<TaskList>> response) {
+                List<TaskList> taskLists= response.body();
+                taskListAdapter.setupData(taskLists);
+            }
 
-        TaskList four = new TaskList();
-        four.taskTxt = "Have Breakfast0";
-        four.description = "Healthy breakfast for a better morning";
-        taskLists.add(four);
+            @Override
+            public void onFailure(Call<List<TaskList>> call, Throwable t) {
+                Toast.makeText(TaskListActivity.this, "Failed fetch data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void setupRecyclerViewForTaskList() {

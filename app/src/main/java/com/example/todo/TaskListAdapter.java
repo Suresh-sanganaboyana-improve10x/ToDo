@@ -8,10 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListViewHolder> {
-    public ArrayList<TaskList> taskListArrayList;
-    public void setupData(ArrayList<TaskList> taskLists) {
+    public List<TaskList> taskListArrayList;
+    public void setupData(List<TaskList> taskLists) {
         taskListArrayList = taskLists;
         notifyDataSetChanged();
     }
