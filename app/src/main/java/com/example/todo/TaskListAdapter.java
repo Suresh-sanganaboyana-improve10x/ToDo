@@ -11,10 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListViewHolder> {
+
     public List<TaskList> taskListArrayList;
+    public OnItemActionListener onItemActionListener;
     public void setupData(List<TaskList> taskLists) {
         taskListArrayList = taskLists;
         notifyDataSetChanged();
+    }
+
+    public void setOnItemActionListener(OnItemActionListener actionListener) {
+        onItemActionListener = actionListener;
     }
     @NonNull
     @Override
@@ -29,6 +35,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListViewHolder> {
         TaskList taskList = taskListArrayList.get(position);
         holder.taskTxt.setText(taskList.taskTxt);
         holder.descriptionTxt.setText(taskList.description);
+        holder.deleteImgBtn.setOnClickListener(view -> {
+            onItemActionListener.onDelete(taskList.id);
+        });
 
     }
 
