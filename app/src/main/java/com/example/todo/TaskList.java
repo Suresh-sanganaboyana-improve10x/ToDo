@@ -2,7 +2,9 @@ package com.example.todo;
 
 import com.google.gson.annotations.SerializedName;
 
-public class TaskList {
+import java.io.Serializable;
+
+public class TaskList implements Serializable {
     @SerializedName("_id")
     public String id;
     @SerializedName("task")

@@ -30,6 +30,12 @@ public class TaskListActivity extends AppCompatActivity {
         setupRecyclerViewForTaskList();
     }
 
+    public void editTask(TaskList taskList) {
+        Intent intent = new Intent(this, AddTaskActivity.class);
+        intent.putExtra("task", taskList);
+        startActivity(intent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -67,7 +73,7 @@ public class TaskListActivity extends AppCompatActivity {
 
             @Override
             public void onEdit(TaskList taskList) {
-
+                editTask(taskList);
             }
         });
         taskListRv.setAdapter(taskListAdapter);
